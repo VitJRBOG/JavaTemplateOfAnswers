@@ -17,6 +17,7 @@ public class MainClass {
         FileCreator("advertising.txt");
         FileCreator("animals.txt");
         FileCreator("announcement.txt");
+        FileCreator("ban.txt");
 
         MainMenu();
     }
@@ -58,7 +59,7 @@ public class MainClass {
 
             String[] arrayStringNamesOfFiles = {
                     "questions.txt", "loss.txt", "familiarity.txt",
-                    "advertising.txt", "animals.txt", "announcement.txt"
+                    "advertising.txt", "animals.txt", "announcement.txt", "ban.txt"
             };
 
             if (varStringInput.equals("0")) {
@@ -89,6 +90,7 @@ public class MainClass {
         System.out.println("COMPUTER: 4 == Get 'advertising'.");
         System.out.println("COMPUTER: 5 == Get 'animals'.");
         System.out.println("COMPUTER: 6 == Get 'announcement'.");
+        System.out.println("COMPUTER: 7 == Get 'ban'.");
         System.out.println("COMPUTER: 0 == Step back.");
 
         Scanner objScanner =
@@ -117,8 +119,12 @@ public class MainClass {
                                 if (varStringInput.equals("6")) {
                                     getAnswerFromFile(arrayStringNamesOfFiles[5]);
                                 } else {
-                                    System.out.println("COMPUTER: Unknown operation.");
-                                    GetAnswerMenu(arrayStringNamesOfFiles);
+                                    if (varStringInput.equals("7")) {
+                                        getAnswerFromFile(arrayStringNamesOfFiles[6]);
+                                    } else {
+                                        System.out.println("COMPUTER: Unknown operation.");
+                                        GetAnswerMenu(arrayStringNamesOfFiles);
+                                    }
                                 }
                             }
                         }
@@ -135,6 +141,7 @@ public class MainClass {
         System.out.println("COMPUTER: 4 == Set 'advertising'.");
         System.out.println("COMPUTER: 5 == Set 'animals'.");
         System.out.println("COMPUTER: 6 == Set 'announcement'.");
+        System.out.println("COMPUTER: 7 == Set 'ban'.");
         System.out.println("COMPUTER: 0 == Step back.");
 
         Scanner objScanner =
@@ -163,8 +170,12 @@ public class MainClass {
                                 if (varStringInput.equals("6")) {
                                     setAnswerToFile(arrayStringNamesOfFiles[5]);
                                 } else {
-                                    System.out.println("COMPUTER: Unknown operation.");
-                                    SetAnswerMenu(arrayStringNamesOfFiles);
+                                    if (varStringInput.equals("7")) {
+                                        setAnswerToFile(arrayStringNamesOfFiles[6]);
+                                    } else {
+                                        System.out.println("COMPUTER: Unknown operation.");
+                                        SetAnswerMenu(arrayStringNamesOfFiles);
+                                    }
                                 }
                             }
                         }
