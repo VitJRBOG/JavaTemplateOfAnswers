@@ -8,43 +8,59 @@ import os
 def starter():
 
     try:
+        if os.path.exists("path.txt") is False:
+            file_text = open("path.txt", "w")
+            file_text.write("")
+            file_text.close()
+            print("COMPUTER: Was created file \"path.txt\".")
 
-        if os.path.exists("output") is False:
-            os.mkdir("output")
+        path = read_path_txt()
+
+        if os.path.exists(path + "output") is False:
+            os.mkdir(path + "output")
             print("COMPUTER: Was created directory \"output\".")
 
-        if os.path.exists("output/question.txt") is False:
-            open("output/question.txt", "w")
+        if os.path.exists(path + "output/question.txt") is False:
+            open(path + "output/question.txt", "w")
             print("COMPUTER: Was created file \"question.txt\".")
 
-        if os.path.exists("output/loss.txt") is False:
-            open("output/loss.txt", "w")
+        if os.path.exists(path + "output/loss.txt") is False:
+            open(path + "output/loss.txt", "w")
             print("COMPUTER: Was created file \"loss.txt\".")
 
-        if os.path.exists("output/familiarity.txt") is False:
-            open("output/familiarity.txt", "w")
+        if os.path.exists(path + "output/familiarity.txt") is False:
+            open(path + "output/familiarity.txt", "w")
             print("COMPUTER: Was created file \"familiarity.txt\".")
 
-        if os.path.exists("output/advertising.txt") is False:
-            open("output/advertising.txt", "w")
+        if os.path.exists(path + "output/advertising.txt") is False:
+            open(path + "output/advertising.txt", "w")
             print("COMPUTER: Was created file \"advertising.txt\".")
 
-        if os.path.exists("output/animals.txt") is False:
-            open("output/animals.txt", "w")
+        if os.path.exists(path + "output/animals.txt") is False:
+            open(path + "output/animals.txt", "w")
             print("COMPUTER: Was created file \"animals.txt\".")
 
-        if os.path.exists("output/announcement.txt") is False:
-            open("output/announcement.txt", "w")
-            print("COMPUTER: Was created file \"announcement.txt\".")
-
-        if os.path.exists("output/ban.txt") is False:
-            open("output/ban.txt", "w")
-            print("COMPUTER: Was created file \"ban.txt\".")
     except Exception as var_except:
         print(
             "COMPUTER: Error, " + str(var_except) + ". Exit from program...")
         exit()
 
+    main_menu()
+
+
+def read_path_txt():
+    try:
+        path = str(open("path.txt", "r").read())
+
+        if len(path) > 0 and path[len(path) - 1] != "/":
+            path += "/"
+
+        return path
+
+    except Exception as var_except:
+        print(
+            "COMPUTER [.. -> Read \"path.txt\"]: Error, " + str(var_except) +
+            ". Return to Main menu...")
     main_menu()
 
 
@@ -72,11 +88,13 @@ def main_menu():
 
 def get_answer():
 
+    PATH = read_path_txt()
+
     def algorythm_get_answer(answer_type):
         try:
             cb = gtk.clipboard_get()
 
-            file = open("output/" + answer_type + ".txt")
+            file = open(PATH + "output/" + answer_type + ".txt")
             text = file.read()
             file.close()
 
@@ -136,6 +154,9 @@ def get_answer():
 
 
 def set_answer():
+
+    PATH = read_path_txt()
+
     def algorythm_set_answer(answer_type):
 
         try:
@@ -144,7 +165,7 @@ def set_answer():
 
             text = text.decode("utf8")
 
-            file = open("output/" + answer_type + ".txt", "w")
+            file = open(PATH + "output/" + answer_type + ".txt", "w")
             file.write(text)
             file.close()
 
