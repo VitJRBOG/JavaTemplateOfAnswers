@@ -67,11 +67,11 @@ def read_path_txt():
 def main_menu():
     print("\n" +
           "COMPUTER [Main menu]: You are in Main menu...")
-    print("COMPUTER [Main menu -> ]: 1 == Get answer.")
-    print("COMPUTER [Main menu -> ]: 2 == Set answer.")
-    print("COMPUTER [Main menu -> ]: 0 == Close program.")
+    print("COMPUTER [Main menu]: 1 == Get answer.")
+    print("COMPUTER [Main menu]: 2 == Set answer.")
+    print("COMPUTER [Main menu]: 0 == Close program.")
 
-    user_answer = raw_input("USER [Main menu -> Set answer]: ")
+    user_answer = raw_input("USER [Main menu]: (1-2/0) ")
 
     if user_answer == "0":
         exit()
@@ -102,26 +102,26 @@ def get_answer():
             gtk.timeout_add(1, gtk.main_quit)
             gtk.main()
 
-            print("COMPUTER [.. -> Set answer -> Set " + answer_type +
-                  "]: Answer was successfully copied to clipboard. Return to Main menu...")
+            print("COMPUTER [.. -> Get answer -> Get " + answer_type +
+                  "]: Answer was successfully copied to clipboard. " +
+                  "Return to Main menu...")
         except Exception as var_except:
-            print("COMPUTER [Main Menu -> Get answer]: Error, " + str(var_except) +
+            print("COMPUTER [Main Menu -> Get answer]: Error, " +
+                  str(var_except) +
                   ". Return to Main Menu...")
 
         main_menu()
 
     print("\n" +
           "COMPUTER [Main menu -> Get answer]: You are in menu Get answer...")
-    print("COMPUTER [Main menu -> Get answer -> ]: 1 == Get question.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 2 == Get loss.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 3 == Get familiarity.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 4 == Get advertising.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 5 == Get animals.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 6 == Get announcement.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 7 == Get ban.")
-    print("COMPUTER [Main menu -> Get answer -> ]: 0 == Step back.")
+    print("COMPUTER [Main menu -> Get answer]: 1 == Get question.")
+    print("COMPUTER [Main menu -> Get answer]: 2 == Get loss.")
+    print("COMPUTER [Main menu -> Get answer]: 3 == Get familiarity.")
+    print("COMPUTER [Main menu -> Get answer]: 4 == Get advertising.")
+    print("COMPUTER [Main menu -> Get answer]: 5 == Get animals.")
+    print("COMPUTER [Main menu -> Get answer]: 0 == Step back.")
 
-    user_answer = raw_input("USER [Main menu -> Set answer]: ")
+    user_answer = raw_input("USER [Main menu -> Get answer]: (1-5/0) ")
 
     if user_answer == "0":
         main_menu()
@@ -141,15 +141,11 @@ def get_answer():
                         if user_answer == "5":
                             algorythm_get_answer("animals")
                         else:
-                            if user_answer == "6":
-                                algorythm_get_answer("announcement")
-                            else:
-                                if user_answer == "7":
-                                    algorythm_get_answer("ban")
-                                else:
-                                    print("COMPUTER [Main menu -> Get answer]: " +
-                                          "Unknown command. Retry query...")
-                                    get_answer()
+                            print("COMPUTER [Main menu -> " +
+                                  "Get answer]: " +
+                                  "Unknown command. Retry query...")
+                            get_answer()
+
     main_menu()
 
 
@@ -172,22 +168,21 @@ def set_answer():
             print("COMPUTER [.. -> Set answer -> Set " + answer_type +
                   "]: Answer was successfully writen. Return to Main menu...")
         except Exception as var_except:
-            print("COMPUTER [Main Menu -> Set answer]: Error, " + str(var_except) +
+            print("COMPUTER [Main Menu -> Set answer]: Error, " +
+                  str(var_except) +
                   ". Return to Main Menu...")
         main_menu()
 
     print("\n" +
           "COMPUTER [Main menu -> Set answer]: You are in menu Set answer...")
-    print("COMPUTER [Main menu -> Set answer -> ]: 1 == Set question.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 2 == Set loss.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 3 == Set familiarity.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 4 == Set advertising.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 5 == Set animals.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 6 == Set announcement.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 7 == Set ban.")
-    print("COMPUTER [Main menu -> Set answer -> ]: 0 == Step back.")
+    print("COMPUTER [Main menu -> Set answer]: 1 == Set question.")
+    print("COMPUTER [Main menu -> Set answer]: 2 == Set loss.")
+    print("COMPUTER [Main menu -> Set answer]: 3 == Set familiarity.")
+    print("COMPUTER [Main menu -> Set answer]: 4 == Set advertising.")
+    print("COMPUTER [Main menu -> Set answer]: 5 == Set animals.")
+    print("COMPUTER [Main menu -> Set answer]: 0 == Step back.")
 
-    user_answer = raw_input("USER [Main menu -> Set answer]: ")
+    user_answer = raw_input("USER [Main menu -> Set answer]: (1-5/0) ")
 
     if user_answer == "0":
         main_menu()
@@ -207,15 +202,10 @@ def set_answer():
                         if user_answer == "5":
                             algorythm_set_answer("animals")
                         else:
-                            if user_answer == "6":
-                                algorythm_set_answer("announcement")
-                            else:
-                                if user_answer == "7":
-                                    algorythm_set_answer("ban")
-                                else:
-                                    print("COMPUTER [Main menu -> Set answer]: " +
-                                          "Unknown command. Retry query...")
-                                    set_answer()
+                            print("COMPUTER [Main menu -> " +
+                                  "Set answer]: " +
+                                  "Unknown command. Retry query...")
+                            set_answer()
 
     main_menu()
 
