@@ -3,6 +3,7 @@
 
 import gtk
 import os
+import re
 
 
 def starter():
@@ -73,6 +74,8 @@ def main_menu():
 
     user_answer = raw_input("USER [Main menu]: (1-2/0) ")
 
+    user_answer = re.sub("[^0123456789\.]", "", user_answer)
+
     if user_answer == "0":
         exit()
     else:
@@ -122,6 +125,8 @@ def get_answer():
     print("COMPUTER [Main menu -> Get answer]: 0 == Step back.")
 
     user_answer = raw_input("USER [Main menu -> Get answer]: (1-5/0) ")
+
+    user_answer = re.sub("[^0123456789\.]", "", user_answer)
 
     if user_answer == "0":
         main_menu()
@@ -183,6 +188,8 @@ def set_answer():
     print("COMPUTER [Main menu -> Set answer]: 0 == Step back.")
 
     user_answer = raw_input("USER [Main menu -> Set answer]: (1-5/0) ")
+
+    user_answer = re.sub("[^0123456789\.]", "", user_answer)
 
     if user_answer == "0":
         main_menu()
