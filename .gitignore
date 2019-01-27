@@ -1,2 +1,4 @@
-/output
+.vscode/
+output/
+.DS_Store
 path.txt
