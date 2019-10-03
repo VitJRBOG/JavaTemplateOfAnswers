@@ -114,7 +114,7 @@ func getTemplate() error {
 			return err
 		}
 		if selectedNumber < len(templates) {
-			clipboard.WriteAll(templates[selectedNumber])
+			clipboard.WriteAll(templates[selectedNumber-1])
 			fmt.Printf("COMPUTER [.. -> Selection template]: Template number %d has been copied to clipboard...\n",
 				selectedNumber)
 			fmt.Println("COMPUTER: Quit...")
