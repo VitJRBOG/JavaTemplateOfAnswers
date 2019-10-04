@@ -48,13 +48,19 @@ func readPathFile() (string, error) {
 	return path, nil
 }
 
-// MapTemplates хранит информацию о шаблонах
-type MapTemplates struct {
-	List []string `json:"list"`
+// MapList хранит информацию о списке шаблонов
+type MapList struct {
+	List []MapTemplate `json:"list"`
+}
+
+// MapTemplate хранит информацию о шаблоне
+type MapTemplate struct {
+	Title string `json:"title"`
+	Text  string `json:"text"`
 }
 
 // readJSON читает JSON-файл с шаблонами
-func readJSON() ([]string, error) {
+func readJSON() ([]MapTemplate, error) {
 	pathToFile, err := readPathFile()
 	if err != nil {
 		return nil, err
@@ -63,7 +69,7 @@ func readJSON() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	mapTemplates := MapTemplates{}
+	mapTemplates := MapList{}
 	err = json.Unmarshal(buf, &mapTemplates)
 	if err != nil {
 		return nil, err
@@ -73,9 +79,9 @@ func readJSON() ([]string, error) {
 }
 
 // showTemplates отображает имеющиеся шаблоны на экране
-func showTemplates(templates []string) error {
+func showTemplates(templates []MapTemplate) error {
 	for i, template := range templates {
-		fmt.Printf("COMPUTER [Main menu]: %d == %v\n", i+1, template)
+		fmt.Printf("COMPUTER [Main menu]: %d == %v\n", i+1, template.Title)
 	}
 	fmt.Print("COMPUTER [Main menu]: 00 == Quit\n")
 
@@ -114,9 +120,9 @@ func getTemplate() error {
 			return err
 		}
 		if selectedNumber < len(templates) {
-			clipboard.WriteAll(templates[selectedNumber-1])
-			fmt.Printf("COMPUTER [.. -> Selection template]: Template number %d has been copied to clipboard...\n",
-				selectedNumber)
+			clipboard.WriteAll(templates[selectedNumber-1].Text)
+			fmt.Printf("COMPUTER [.. -> Selection template]: Template \"%v\" has been copied to clipboard...\n",
+				templates[selectedNumber-1].Title)
 			fmt.Println("COMPUTER: Quit...")
 			os.Exit(0)
 		} else {
