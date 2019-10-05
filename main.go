@@ -14,6 +14,9 @@ import (
 
 // main главная функция
 func main() {
+	// запускаем инициализацию ресурсных файлов
+	initialization()
+
 	fmt.Println("COMPUTER: You are in Main menu. Select template for copying.")
 
 	// запрашиваем у пользователя номер нужного ему шаблона
@@ -21,6 +24,41 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// initialization проверяет наличие ресурсных файлов и создает их, если отсутствуют
+func initialization() error {
+
+	// проверяем наличие файла с путем к файлу с шаблонами
+	if _, err := os.Stat("path.txt"); os.IsNotExist(err) {
+
+		// если отсутствует, то создаем новый
+		valuesBytes := []byte("")
+		err = ioutil.WriteFile("path.txt", valuesBytes, 0644)
+		if err != nil {
+			return err
+		}
+		fmt.Println("COMPUTER [Initialization]: File \"path.txt\" has been created.")
+	}
+
+	// получаем путь к файлу с шаблонами
+	path, err := readPathFile()
+	if err != nil {
+		return err
+	}
+
+	// проверяем наличие файла с шаблонами
+	if _, err := os.Stat(path + "templates.json"); os.IsNotExist(err) {
+
+		// если отсутствует, то создаем новый
+		var templates MapList
+		err = writeJSON(templates)
+		if err != nil {
+			return err
+		}
+		fmt.Println("COMPUTER [Initialization]: File \"templates.json\" has been created.")
+	}
+	return nil
 }
 
 // readPathFile читает из текстового файла путь к файлу со списком шаблонов
@@ -46,10 +84,11 @@ func readPathFile() (string, error) {
 	}
 
 	// проверяем наличие слэша в конце строки и добавляем его, если отсутствует
-	if string(path[len(path)-1]) != "/" {
-		path += "/"
+	if len(path) > 0 {
+		if string(path[len(path)-1]) != "/" {
+			path += "/"
+		}
 	}
-
 	return path, nil
 }
 
@@ -91,9 +130,14 @@ func readJSON() (MapList, error) {
 
 // showTemplates отображает имеющиеся шаблоны на экране
 func showTemplates(templates []MapTemplate) error {
-	for i, template := range templates {
-		fmt.Printf("COMPUTER [Main menu]: %d == %v\n", i+1, template.Title)
+
+	// проверяем наличие шаблонов в списке, если есть, то выводим их
+	if len(templates) > 0 {
+		for i, template := range templates {
+			fmt.Printf("COMPUTER [Main menu]: %d == %v\n", i+1, template.Title)
+		}
 	}
+
 	fmt.Printf("COMPUTER [Main menu]: %d == %v", len(templates)+1, "Create new template\n")
 	fmt.Print("COMPUTER [Main menu]: 00 == Quit\n")
 
@@ -174,15 +218,7 @@ func getTemplate() error {
 }
 
 // writeJSON перезаписывает файл с шаблонами
-func writeJSON(newTemplate MapTemplate) error {
-	// получаем карту с шаблонами
-	templates, err := readJSON()
-	if err != nil {
-		return err
-	}
-
-	// добавляем новый шаблон к имеющимся
-	templates.List = append(templates.List, newTemplate)
+func writeJSON(templates MapList) error {
 
 	// получаем путь к файлу с шаблонами
 	pathToFile, err := readPathFile()
@@ -258,8 +294,17 @@ func createNewTemplate() error {
 	}
 	newTemplate.Text = text
 
-	// записываем полученные данные в файл
-	writeJSON(newTemplate)
+	// получаем карту с шаблонами
+	templates, err := readJSON()
+	if err != nil {
+		return err
+	}
+
+	// добавляем новый шаблон к имеющимся
+	templates.List = append(templates.List, newTemplate)
+
+	// сохраняем измененную карту в файл
+	writeJSON(templates)
 
 	return nil
 }
