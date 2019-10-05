@@ -60,22 +60,21 @@ type MapTemplate struct {
 }
 
 // readJSON читает JSON-файл с шаблонами
-func readJSON() ([]MapTemplate, error) {
+func readJSON() (MapList, error) {
+	var mapTemplates MapList
 	pathToFile, err := readPathFile()
 	if err != nil {
-		return nil, err
+		return mapTemplates, err
 	}
 	buf, err := ioutil.ReadFile(pathToFile + "templates.json")
 	if err != nil {
-		return nil, err
+		return mapTemplates, err
 	}
-	mapTemplates := MapList{}
 	err = json.Unmarshal(buf, &mapTemplates)
 	if err != nil {
-		return nil, err
+		return mapTemplates, err
 	}
-	templates := mapTemplates.List
-	return templates, nil
+	return mapTemplates, nil
 }
 
 // showTemplates отображает имеющиеся шаблоны на экране
@@ -83,6 +82,7 @@ func showTemplates(templates []MapTemplate) error {
 	for i, template := range templates {
 		fmt.Printf("COMPUTER [Main menu]: %d == %v\n", i+1, template.Title)
 	}
+	fmt.Printf("COMPUTER [Main menu]: %d == %v", len(templates)+1, "Create new template\n")
 	fmt.Print("COMPUTER [Main menu]: 00 == Quit\n")
 
 	return nil
@@ -95,7 +95,7 @@ func getTemplate() error {
 		return err
 	}
 
-	err = showTemplates(templates)
+	err = showTemplates(templates.List)
 	if err != nil {
 		return err
 	}
@@ -114,15 +114,20 @@ func getTemplate() error {
 		fmt.Println("COMPUTER [.. -> Selection template]: Error! Number of template couldn't equal 0.")
 		fmt.Println("COMPUTER [.. -> Selection template]: Return...")
 		return getTemplate()
+	case strconv.Itoa(len(templates.List) + 1):
+		err := createNewTemplate()
+		if err != nil {
+			return err
+		}
 	default:
 		selectedNumber, err := strconv.Atoi(userAnswer)
 		if err != nil {
 			return err
 		}
-		if selectedNumber < len(templates) {
-			clipboard.WriteAll(templates[selectedNumber-1].Text)
+		if selectedNumber <= len(templates.List) {
+			clipboard.WriteAll(templates.List[selectedNumber-1].Text)
 			fmt.Printf("COMPUTER [.. -> Selection template]: Template \"%v\" has been copied to clipboard...\n",
-				templates[selectedNumber-1].Title)
+				templates.List[selectedNumber-1].Title)
 			fmt.Println("COMPUTER: Quit...")
 			os.Exit(0)
 		} else {
@@ -131,6 +136,86 @@ func getTemplate() error {
 			return getTemplate()
 		}
 	}
+
+	return nil
+}
+
+// writeJSON перезаписывает файл с шаблонами
+func writeJSON(newTemplate MapTemplate) error {
+	templates, err := readJSON()
+	if err != nil {
+		return err
+	}
+
+	templates.List = append(templates.List, newTemplate)
+
+	pathToFile, err := readPathFile()
+	if err != nil {
+		return err
+	}
+
+	valuesBytes, err := json.Marshal(templates)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = ioutil.WriteFile(pathToFile+"templates.json", valuesBytes, 0644)
+
+	return nil
+}
+
+// selectTitle принимает заголовок шаблона
+func selectTitle() (string, error) {
+	fmt.Print("COMPUTER [.. -> Create new template]: Copy title for template and press Enter.")
+	var userAnswer string
+	// BUG: вылетает ошибка unexpected newline, хотя тут задуман ввод пустой строки
+	// пока оставлю так
+	// _, err := fmt.Scanln(&userAnswer)
+	// if err != nil {
+	// 	return "", err
+	// }
+	fmt.Scanln(&userAnswer)
+	title, err := clipboard.ReadAll()
+	if err != nil {
+		return "", err
+	}
+	return title, nil
+}
+
+// selectText принимает текст шаблона
+func selectText() (string, error) {
+	fmt.Print("COMPUTER [.. -> Create new template]: Copy text for template and press Enter.")
+	var userAnswer string
+	// BUG: вылетает ошибка unexpected newline, хотя тут задуман ввод пустой строки
+	// пока оставлю так
+	// _, err := fmt.Scanln(&userAnswer)
+	// if err != nil {
+	// 	return "", err
+	// }
+	fmt.Scanln(&userAnswer)
+	text, err := clipboard.ReadAll()
+	if err != nil {
+		return "", err
+	}
+	return text, nil
+}
+
+// createNewTemplate добавляет новый шаблон в список
+func createNewTemplate() error {
+	var newTemplate MapTemplate
+	title, err := selectTitle()
+	if err != nil {
+		return err
+	}
+	newTemplate.Title = title
+
+	text, err := selectText()
+	if err != nil {
+		return err
+	}
+	newTemplate.Text = text
+
+	writeJSON(newTemplate)
 
 	return nil
 }
